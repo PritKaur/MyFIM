@@ -49,6 +49,7 @@ def load_decrypted_baseline() -> dict:
     baseline = json.loads(json_bytes.decode("utf-8"))
 
     print("Baseline has been loaded and decrypted successfully")
+    baseline = {os.path.normpath(k): v for k, v in baseline.items()}
     return baseline
 
 #This block asks the user whether they want to monitor a folder or a file
@@ -67,6 +68,12 @@ def select_target():
         path = filedialog.askopenfilename(title="Select file to monitor")
 
     return path 
+
+#This function will save the monitored path to config.json so that monitor.py can read it automatically instead of asking the user to select the file/folder for monitoring again
+def save_monitored_file_path(target):
+    with open("config.json", "w") as f:
+        json.dump({"monitored_path": target}, f)
+    print(f"Monitored file path has been saved to config.json: {target}")
 
 #This function handles the user's choice, generates the hash and saves it to baseline.json
 def create_baseline(target, existing_baseline=None):
@@ -89,6 +96,7 @@ def create_baseline(target, existing_baseline=None):
                     print(f"Skipped: {file_path} - {e}")
 
     save_encrypted_baseline(baseline)
+    save_monitored_file_path(target)
 
     print(f"\nBaseline hash created successfully for: {target}")
     return baseline
@@ -120,6 +128,7 @@ if __name__ == "__main__":
             )
             if user_choice == "yes": #If a baseline exists
                 baseline = existing_baseline
+                save_monitored_file_path(target)
                 messagebox.showinfo(
                     "Existing baseline (secure reference) loaded",
                     "Your existing secure reference has been loaded.\n"
