@@ -98,7 +98,7 @@ class MyFIMEventHandler(FileSystemEventHandler):
             self.last_known_hash[file_path] = new_hash
 
             #This will compare the new hash against the trusted baseline hash
-            baseline_hash = self.baseline.get(file_path)
+            baseline_hash = self.baseline.get(os.path.normpath(file_path))
 
             if new_hash != baseline_hash:
                 #If the current hash doesn't match the baseline, that means file has been changed
@@ -131,9 +131,9 @@ class MyFIMEventHandler(FileSystemEventHandler):
         if self.is_target_file(event.src_path):
             return
         
-        if event.src_path in self.baseline:
+        if os.path.normpath(event.src_path) in self.baseline:
             print(f"File has been deleted: {event.src_path}")
-            save_detection_alert(event.src_path, "Deleted")
+        save_detection_alert(event.src_path, "Deleted")
         
         self.last_known_hash.pop(event.src_path, None)
 

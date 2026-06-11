@@ -103,7 +103,7 @@ def create_baseline(target, existing_baseline=None):
 
 #Only runs when I execute this script directly, it won't run when another script imports from this script
 if __name__ == "__main__":
-    target = select_target()
+    target = os.path.normpath(select_target())
 
     if not target:
         print("No file or folder has been selected.")
@@ -116,7 +116,7 @@ if __name__ == "__main__":
             existing_baseline = load_decrypted_baseline()
 
         #This will check if that file or folder has entries in the baseline.json
-        target_already_exists = any(path.startswith(target) for path in existing_baseline.keys())
+        target_already_exists = any(os.path.normpath(path).startswith(target) for path in existing_baseline.keys())
 
         if target_already_exists: #The selected file/folder has been monitored before
             user_choice = messagebox.askquestion(
