@@ -1,27 +1,27 @@
 import hashlib
-import os
-import json
-import tkinter as  tk
-from hasher import generate_hash
+import os #Lets you interact with the file system
+import json #Lets you convert between JSON text and python dictionaries
+import tkinter as  tk #Python's GUI library used for the pop-up windows 
+from hasher import generate_hash #Function from hasher.py
 from tkinter import filedialog, messagebox
-from cryptography.fernet import Fernet
+from cryptography.fernet import Fernet #The encryption tool from the cryptography library
 
 #Encryption function blocks
 #This block checks if secret key exists, if it does then it loads it, and if it doesn't then it creates one and saves it
 def create_or_load_key():
     key_file = "secret.key"
 
-    if not os.path.exists(key_file):
-        key = Fernet.generate_key() #This will generate a random key
+    if not os.path.exists(key_file): #Checks whether secret.key is already there
+        key = Fernet.generate_key() #This will generate a random key if there's no existing secret.key
         with open(key_file, "wb") as f:
             f.write(key)
         print("New encryption key has been created: secret.key")
     else:
-        with open(key_file, "rb") as f:
+        with open(key_file, "rb") as f: #If a key exists, it's just read
             key = f.read()
         print("Existing encryption key has been loaded.")
 
-    return key
+    return key #The key is returned so that it can be used to encrypt and/or decrypt
 
 #This block converts the baseline dictionary into a JSON string that is encrypted and writes them to baseline.json
 def save_encrypted_baseline(baseline: dict):
@@ -32,21 +32,21 @@ def save_encrypted_baseline(baseline: dict):
 
     encrypted = fernet.encrypt(json_bytes) #This encrypts those bytes
 
-    with open("baseline.json", "wb") as f:
+    with open("baseline.json", "wb") as f: #The encrypted bytes are then written to baseline.json
         f.write(encrypted)
 
     print("Baseline has been saved to baseline.json successfully")
 
 #This block will read baseline.json and decrypt it using secret.key to recover the original dictionary
-def load_decrypted_baseline() -> dict:
+def load_decrypted_baseline() -> dict: #This function does the exact reverse of saving the baseline hash
     key = create_or_load_key()
     fernet = Fernet(key)
 
-    with open("baseline.json", "rb") as f:
+    with open("baseline.json", "rb") as f: #This reads the raw encrypted bytes from baseline.json
         encrypted = f.read()
 
-    json_bytes = fernet.decrypt(encrypted)
-    baseline = json.loads(json_bytes.decode("utf-8"))
+    json_bytes = fernet.decrypt(encrypted) #Converts the encrypted bytes back to the original form
+    baseline = json.loads(json_bytes.decode("utf-8")) #The decode here converts the bytes back into a string and the json.loads converts the JSON string back into a python dictionary
 
     print("Baseline has been loaded and decrypted successfully")
     baseline = {os.path.normpath(k): v for k, v in baseline.items()}
@@ -54,10 +54,10 @@ def load_decrypted_baseline() -> dict:
 
 #This block asks the user whether they want to monitor a folder or a file
 def select_target():
-    root = tk.Tk()
-    root.withdraw()
+    root = tk.Tk() #This creates the main window that is hidden and needed by the tkinter before tkinter can show any pop-up
+    root.withdraw() #This immediately hides it so that only the dialog box is seen, and not an empty window
 
-    user_choice = messagebox.askquestion(
+    user_choice = messagebox.askquestion( #This will now show the Yes/No pop-up
         "Select File/Folder",
         "Do you want to monitor a folder or a file? \n\n Click 'Yes' for a folder, 'No' for a single file "
     )
@@ -67,39 +67,39 @@ def select_target():
     else:
         path = filedialog.askopenfilename(title="Select file to monitor")
 
-    return path 
+    return path #The chosen file path will be returned as a string
 
 #This function will save the monitored path to config.json so that monitor.py can read it automatically instead of asking the user to select the file/folder for monitoring again
 def save_monitored_file_path(target):
-    with open("config.json", "w") as f:
-        json.dump({"monitored_path": target}, f)
+    with open("config.json", "w") as f: #Opens config.json in write mode
+        json.dump({"monitored_path": target}, f) #Writes the path into config.json
     print(f"Monitored file path has been saved to config.json: {target}")
 
 #This function handles the user's choice, generates the hash and saves it to baseline.json
-def create_baseline(target, existing_baseline=None):
+def create_baseline(target, existing_baseline=None): #Takes the target file path and an existing baseline dictionary if it's there
     baseline = existing_baseline if existing_baseline else{} #If there is an existing baseline for a file or folder the user selected in a previous session, they can decide to continue with it
 
-    if os.path.isfile(target):
+    if os.path.isfile(target): #This will check if the target is a single file or a whole folder
         try:
-            baseline[target] = generate_hash(target)
+            baseline[target] = generate_hash(target) #Hashes and stores result in dictionary
             print(f"Hashed file: {target}")
-        except (PermissionError, FileNotFoundError) as e:
+        except (PermissionError, FileNotFoundError) as e: #Catches the errors no read permission or file doesn't exist
             print(f"Skipped: {target} - {e}")
-    else:
-        for root, dirs, files in os.walk(target):
-            for file in files:
-                file_path = os.path.join(root, file)
+    else: #Code executed if the target is a folder
+        for root, dirs, files in os.walk(target): #root is the current directory path, dirs is list of subdirectories and files is list of files in the folder
+            for file in files: #Loops through every file in the directory
+                file_path = os.path.join(root, file) #builds the file path
                 try:
-                    baseline[file_path] = generate_hash(file_path)
+                    baseline[file_path] = generate_hash(file_path) #Hashes and stores result in dictionary under its full path
                     print(f"Hashed: {file_path}")
                 except (PermissionError, FileNotFoundError) as e:
                     print(f"Skipped: {file_path} - {e}")
 
-    save_encrypted_baseline(baseline)
-    save_monitored_file_path(target)
+    save_encrypted_baseline(baseline) #Saves the completed baseline dictionary to storage
+    save_monitored_file_path(target) #Saves the monitored file path in config.json for future use
 
     print(f"\nBaseline hash created successfully for: {target}")
-    return baseline
+    return baseline #returns the baseline dictionary so it can be used immediately without having to be reloaded from the disk
 
 #Only runs when I execute this script directly, it won't run when another script imports from this script
 if __name__ == "__main__":
