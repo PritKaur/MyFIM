@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFIM Login Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css')}}">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="logo-box">MyFIM Dashboard</div>
+        <div class="page-title">Login Page</div>
+    </header>
+
+    <main class="container">
+        <div class="login-card">
+            <h1>Login</h1>
+            <p class="subtitle">Sign in to continue</p>
+
+            <!--This error message will only appear if Flask sends an error when the user enters incorrect login details-->
+            {% if error %} <!--Jinja2's templating syntax that Flask uses-->
+            <div class="error-message">
+                {{ error }} <!--This is where Flask injects the actual error message-->
+            </div>
+            {% endif %}
+
+            <!--Form will post directly to the /login route in Flask-->
+            <form method="post" action="/login" id="login-form">
+                <div class="user-input">
+                    <label for="username">USERNAME</label>
+                    <input type="text" name="username" id="username" required autocomplete="username">
+                </div>
+                <div class="user-input">
+                    <label for="password">PASSWORD</label>
+                    <input type="password" name="password" id="password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn-login" id="loginBtn">Login</button>
+            </form>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+</body>
+</html>
