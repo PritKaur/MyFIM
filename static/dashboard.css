@@ -1,0 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body{
+    background-color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/*The container for 'MyFIM Dashboard' and 'Dashboard Overview' text*/
+.dashboard-header{
+    display: flex;
+    width: 100%;
+    height: 70px;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 25px;
+    border: 1px solid black;
+}
+/*Left header is the 'MyFIM Dashboard' and 'Dashboard Overview' text and right header is the log out button*/
+.left-header, .right-header{
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+/*The Log Out button container*/
+.right-header{
+    gap: 30px;
+    padding-right: 25px;
+}
+/*The 'MyFIM Dashboard' text*/
+.logo-box{
+    background-color: #0056b3;
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    padding: 0 25px;
+}
+/*The 'Dashboard Overview' text*/
+.page-title{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 15px;
+}
+/*Log Out button*/
+.logout-button{
+    background: white;
+    border: 1px solid black;
+    padding: 13px 35px;
+    border-radius: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+.logout-button:hover {
+    background-color: black;
+    color: white;
+}
+/*The main container that holds the content of the dashboard*/
+.dashboard-container{
+    max-width: 1350px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 25px;
+}
+/*The summary cards at the top of the dashboard*/
+.cards{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+/*Individual summary card*/
+.card {
+    background: white;
+    border: 1px solid black;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 150px;
+}
+/*The name/label of the card*/
+.card-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: black;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+/*Live counter that shows the current total for that card in that particular moment*/
+.card-count {
+    font-size: 33px;
+    font-weight: bold;
+    color: black;
+}
+/*The section with actual data*/
+.data-section{
+    margin-bottom: 40px;
+}
+/*Monitored Files and Alerts Table Heading*/
+.table-heading{
+    font-size: 22px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 15px;
+}
+.table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.table th, .table td{
+    border: 1px solid black;
+    padding: 14px 18px;
+    font-size: 15px;
+    text-align: left;
+    color: black;
+}
+.table th{
+    font-weight: bold;
+    background-color: white;
+}
+/*The path of the file being monitored*/
+.filepath{
+    font-family: 'Courier New', Courier, monospace;
+    color: #333;
+}
+/*File Change*/
+.text-danger{
+    color: red !important; /*The !important force the text inside the table cells to change color*/
+}
+/*File that is okay and not affected by an attacker*/
+.text-success{
+    color: green !important;
+}

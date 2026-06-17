@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyFIM Dashboard Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="left-header">
+            <div class="logo-box">MyFIM Dashboard</div>
+            <div class="page-title">Dashboard Overview</div>
+        </div>
+        <div class="right-header">
+            <button class="logout-button">Log Out</button>
+        </div>
+    </header>
+
+    <!--The main container that holds the content of the dashboard-->
+    <main class="dashboard-container">
+        <!--The summary cards at the top of the dashboard-->
+        <div class="cards">
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-label">Total Files Monitored</p>
+                    <p class="card-count" id="totalFiles">2</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-label">Total Number of Alerts</p>
+                    <p class="card-count" id="totalAlerts">2</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-label">Files modified</p>
+                    <p class="card-count" id="totalModified">2</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-text">
+                    <p class="card-label">Files Deleted</p>
+                    <p class="card-count" id="totalDeleted">2</p>
+                </div>
+            </div>
+        </div>
+
+        <!--The tables with actual data about the files being monitored and any file change alerts reported-->
+        <!--The 'Monitored Files' table-->
+        <div class="data-section">
+            <h2 class="table-heading">Monitored Files</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name of File</th>
+                        <th>Location of File</th>
+                    </tr>
+                </thead>
+                <tbody id="monitoredFilesBody">
+                    <!--Will later be dynamically populated by Javascript-->
+                    <tr>
+                        <td><strong>payroll.xlsx</strong></td>
+                        <td class="filepath">C:\business\finance\</td>
+                    </tr>
+                    <tr>
+                        <td><strong>customers.csv</strong></td>
+                        <td class="filepath">C:\business\records\</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="data-section">
+            <!--The 'Alerts' table-->
+            <h2 class="table-heading">Alerts</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name of File</th>
+                        <th>Location of File</th>
+                        <th>What type of file change happened?</th>
+                        <th>When did the file change happen?</th>
+                    </tr>
+                </thead>
+                <tbody id="alertsBody">
+                    <!--Will later be dynamically populated by Javascript-->
+                    
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
