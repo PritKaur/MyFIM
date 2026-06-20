@@ -109,7 +109,7 @@ h1{
     box-shadow: 0 0 4px rgba(0, 86, 179, 0.2);
 }
 /*The Login button*/
-.btn-login{
+.login-button{
     background-color: black;
     color: white;
     border: none;
@@ -122,10 +122,10 @@ h1{
     border-radius: 4px;
 }
 /*When a user hovers on the Login button*/
-.btn-login:hover{
+.login-button:hover{
     background-color: #0056b3;
 }   
-.btn-login:disabled{
+.login-button:disabled{
     background-color: #555;
     cursor: not-allowed;
 }
