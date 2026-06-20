@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, session, request, redirect, render_template
 import json
 import os
+from baseline import load_decrypted_baseline
 
 #This creates the web application, the dashboard
 app = Flask(__name__) 
@@ -30,7 +31,7 @@ def login():
             session['logged_in'] = True #Credentials match
             return redirect('/dashboard') #User is sent to the dashboard page
         else:
-            error = "Username or password entered was incorrect. Please try again"
+            error = "Username or password entered was incorrect. Please try again!"
     
     return render_template('login.html', error=error)
 
@@ -66,6 +67,20 @@ def alerts():
     except (json.JSONDecodeError, OSError): #Catches errors like JSON in the file being corrupted or the file is not being able to be read
         return jsonify([]) #Returns an empty list to avoid the program crashing
     
+#This is the API monitored files route which returns the list of the file paths being monitored 
+@app.route('/api/monitored-files')
+def monitored_files():
+     #If the user hasn't logged in they will be redirected to the login page again
+    if 'logged_in' not in session:
+        return redirect('/login')
+    
+    try:
+        baseline = load_decrypted_baseline() #Decrypts and loads the baseline dictionary
+        file_list = list(baseline.keys()) #Extracts the file paths of the files being monitored
+        return jsonify(file_list) #Sends the list of the file paths back to JSON
+    except (FileNotFoundError, OSError): #Catches errors like the file not being found or not being able to be read 
+        return jsonify([]) #Returns an empty list to avoid the program crashing
+
 #Only runs when I execute this script directly, it won't run when another script imports from this script
 if __name__ == "__main__":
     #The user_reloader=False turns off the file watcher (watchdog) which was causing a reloading loop when I ran this file directly

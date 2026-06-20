@@ -53,14 +53,13 @@ body{
 .logout-button{
     background: white;
     border: 1px solid black;
-    padding: 13px 35px;
+    padding: 15px 35px;
     border-radius: 18px;
     cursor: pointer;
     font-weight: bold;
     font-size: 13px;
     display: flex;
     align-items: center;
-    gap: 8px;
     transition: background-color 0.2s;
 }
 .logout-button:hover {
@@ -141,8 +140,4 @@ body{
 /*File Change*/
 .text-danger{
     color: red !important; /*The !important force the text inside the table cells to change color*/
-}
-/*File that is okay and not affected by an attacker*/
-.text-success{
-    color: green !important;
 }
