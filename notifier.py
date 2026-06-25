@@ -17,3 +17,7 @@ def send_alert(file_name, change_type): #Takes the name of file and type of chan
     toast.add_actions(label="Open Dashboard", launch="http://localhost:5000/login")
 
     toast.show() #This is what triggers the notification to make it appear on the user's screen
+
+#Just to test if notifier.py actually works on its own as a script
+if __name__ == "__main__":
+    send_alert("test_file.txt", "Modified")
