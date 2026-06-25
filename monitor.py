@@ -5,6 +5,7 @@ from watchdog.observers import Observer #Observer watches the filesystem for eve
 from watchdog.events import FileSystemEventHandler #This imports a base class that helps define what to do when a file event happens
 from hasher import generate_hash #Function from hasher.py
 from baseline import load_decrypted_baseline #Function from baseline.py
+from notifier import send_alert #Function from notifier.py
 
 #Variables storing the filenames being used in the code 
 baseline_file = "baseline.json"
@@ -109,7 +110,16 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
             if new_hash != baseline_hash:
                 #If the current hash doesn't match the baseline, that means file has been changed
                 print(f"Modification has been detected: {file_path}")
-                save_detection_alert(file_path, "Modified")
+                
+                try:
+                    save_detection_alert(file_path, "Modified")
+                except OSError as e:
+                    print(f"Could not save the alert for {file_path}: {e}")
+
+                try:    
+                    send_alert(os.path.basename(file_path), "Modified")
+                except Exception as e: #This broader except Exception is there because failure could be because of anything since it's calling a third-party library, winotify
+                    print(f"Could not send the notification for {file_path}: {e}")
             else:
                 #If the hashes match, that means the file did not get changed
                 print(f"No file change detected: {file_path}")
@@ -118,6 +128,8 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
             print(f"Could not hash the file: {file_path} - {e}")
 
     def on_created(self, event):
+        file_path = event.src_path #Stores the path of the created file into a variable called file_path
+
         #This will fire an alert when a new file has been added
         if event.is_directory:
             return
@@ -127,10 +139,21 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
             return
         
         print(f"A new file has been detected: {event.src_path}")
-        save_detection_alert(event.src_path, "Created")
+        #save_detection_alert may only fail because of file I/O issues so maybe the disk is full, the file is locked, etc  
+        try:
+            save_detection_alert(event.src_path, "Created")
+        except OSError as e:
+            print(f"Could not save the alert for {file_path}: {e}")
+
+        try:
+            send_alert(os.path.basename(file_path), "Created")
+        except Exception as e: #This broader except Exception is there because failure could be because of anything since it's calling a third-party library, winotify
+            print(f"Could not send the notification for {file_path}: {e}")
         #Any new file will be suspicious because its not even in the baseline
 
     def on_deleted(self, event):
+        file_path = event.src_path #Stores the path of the deleted file into a variable called file_path
+
         #This will fire an alert when a file has been deleted
         if event.is_directory:
             return
@@ -141,7 +164,15 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
         
         if os.path.normpath(event.src_path) in self.baseline:
             print(f"File has been deleted: {event.src_path}") #Only prints the message is the file deleted was actually in the baseline
-        save_detection_alert(event.src_path, "Deleted") #The laert is saved regardless of whether the file was in the baseline
+        try:
+            save_detection_alert(event.src_path, "Deleted")
+        except OSError as e:
+            print(f"Could not save the alert for {file_path}: {e}")
+
+        try:
+            send_alert(os.path.basename(file_path), "Deleted")
+        except Exception as e: #This broader except Exception is there because failure could be because of anuthing since it's calling a third-party library, winotify
+            print(f"Could not send the notification for {file_path}: {e}")
         
         self.last_known_hash.pop(event.src_path, None) #Removes the file from the hash tracker since it no longer exists
 
@@ -165,11 +196,29 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
             #Here alerts are saved either way but the difference is between whether the file was just moved or if its content was also changed
             if new_hash != baseline_hash:
                 print(f"File was moved and content was changed: {old_path} -> {new_path}")
-                save_detection_alert(old_path, "Renamed/Moved & Content Changed", dest_path=new_path)
+                
+                try:
+                    save_detection_alert(old_path, "Renamed/Moved & Content Changed", dest_path=new_path)
+                except OSError as e:
+                    print(f"Could not save the alert for {old_path}: {e}")
+
+                try:
+                    send_alert(os.path.basename(new_path), "Renamed/Moved & Content Changed")
+                except Exception as e:
+                    print(f"Could not send the notification for {new_path}: {e}")
             else:
                 print(f"File was moved but content is unchanged: {old_path} → {new_path}")
-                save_detection_alert(old_path, "Renamed/Moved & Content Unchanged", dest_path=new_path)
-            
+                
+                try:
+                    save_detection_alert(old_path, "Renamed/Moved & Content Unchanged", dest_path=new_path)
+                except OSError as e:
+                    print(f"Could not save the alert for {old_path}: {e}")
+
+                try:    
+                    send_alert(os.path.basename(new_path), "Renamed/Moved & Content Unchanged")
+                except Exception as e:
+                    print(f"Could not send the notification for {new_path}: {e}")
+
             #Updates the hash tracker and removes the old path entry by replacing it with the new one
             self.last_known_hash.pop(old_path, None)
             self.last_known_hash[new_path] = new_hash
