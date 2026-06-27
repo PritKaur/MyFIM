@@ -208,7 +208,7 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
                     print(f"Could not send the notification for {new_path}: {e}")
             else:
                 print(f"File was moved but content is unchanged: {old_path} → {new_path}")
-                
+    
                 try:
                     save_detection_alert(old_path, "Renamed/Moved & Content Unchanged", dest_path=new_path)
                 except OSError as e:
@@ -219,9 +219,9 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
                 except Exception as e:
                     print(f"Could not send the notification for {new_path}: {e}")
 
-            #Updates the hash tracker and removes the old path entry by replacing it with the new one
-            self.last_known_hash.pop(old_path, None)
-            self.last_known_hash[new_path] = new_hash
+                #Since the content is unchanged, the file is still trustworthy so this is there to update the baseline so it's tracked correctly at its new location
+                self.baseline[os.path.normpath(new_path)] = new_hash
+                self.baseline.pop(os.path.normpath(old_path), None) #Removes the stale old-path entry so it doesn't linger forever
         
         except (FileNotFoundError, PermissionError) as e:
             print(f"Could not hash moved file: {new_path} - {e}")
