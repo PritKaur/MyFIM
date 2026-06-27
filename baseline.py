@@ -84,7 +84,7 @@ def create_baseline(target, existing_baseline=None): #Takes the target file path
         try:
             baseline[target] = generate_hash(target) #Hashes and stores result in dictionary
             print(f"Hashed file: {target}")
-        except (PermissionError, FileNotFoundError) as e: #Catches the errors no read permission or file doesn't exist
+        except (Exception) as e: #Catches any unexpected errors that may cause the baseline run to crash
             print(f"Skipped: {target} - {e}")
     else: #Code executed if the target is a folder
         for root, dirs, files in os.walk(target): #root is the current directory path, dirs is list of subdirectories and files is list of files in the folder
