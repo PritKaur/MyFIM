@@ -82,6 +82,6 @@ def monitored_files():
         return jsonify([]) #Returns an empty list to avoid the program crashing
 
 #Only runs when I execute this script directly, it won't run when another script imports from this script
-if __name__ == "__main__":
+if __name__ == "__main__": #Starts the Flask server
     #The user_reloader=False turns off the file watcher (watchdog) which was causing a reloading loop when I ran this file directly
     app.run(debug=True, use_reloader=False) 
