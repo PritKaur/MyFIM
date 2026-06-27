@@ -5,6 +5,7 @@ import tkinter as  tk #Python's GUI library used for the pop-up windows
 from hasher import generate_hash #Function from hasher.py
 from tkinter import filedialog, messagebox
 from cryptography.fernet import Fernet #The encryption tool from the cryptography library
+import sys
 
 #Encryption function blocks
 #This block checks if secret key exists, if it does then it loads it, and if it doesn't then it creates one and saves it
@@ -49,7 +50,7 @@ def load_decrypted_baseline() -> dict: #This function does the exact reverse of 
     baseline = json.loads(json_bytes.decode("utf-8")) #The decode here converts the bytes back into a string and the json.loads converts the JSON string back into a python dictionary
 
     print("Baseline has been loaded and decrypted successfully")
-    baseline = {os.path.normpath(k): v for k, v in baseline.items()}
+    baseline = {os.path.normpath(k): v for k, v in baseline.items()} #What os.path.normpath does is that it cleans up a file path string without touching the actual filesystem, so it cleans up a meessy file path into a standard form, on windows it makes slashes \ and / consistent 
     return baseline
 
 #This block asks the user whether they want to monitor a folder or a file
@@ -103,11 +104,14 @@ def create_baseline(target, existing_baseline=None): #Takes the target file path
 
 #Only runs when I execute this script directly, it won't run when another script imports from this script
 if __name__ == "__main__":
-    target = os.path.normpath(select_target())
+    raw_target = select_target()
 
-    if not target:
+    #Checks if raw_target is "falsy" meaning empty
+    if not raw_target: #Triggered if the user closes the file picker dialog without picking anything
         print("No file or folder has been selected.")
-    else:
+        sys.exit(1) #So baseline.py can exit with a non-zero code (a unix/windows convention meaning "program failed") when the user doesn't select anything
+    else: #Triggered if a target was selected by the user
+        target = os.path.normpath(raw_target) #Cleans up the path string
         print(f"Selected file/folder: {target}")
 
         #This will load the existing baseline hash if the file exists in baseline.json
