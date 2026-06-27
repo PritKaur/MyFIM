@@ -15,8 +15,8 @@ async function loadMonitoredFiles(){
             const  row = document.createElement('tr'); //Creates a new <tr> element (table row)
             //This will build a table row for every file
             row.innerHTML = `
-                <td><strong>${fileName}</strong></td> //Name of the file in bold
-                <td class = "filepath">${filePath}</td> //Full path of the file
+                <td><strong>${fileName}</strong></td>
+                <td class = "filepath">${filePath}</td> 
             `;
             tbody.appendChild(row); //Row is  added to the table 
         });
