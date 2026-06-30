@@ -188,9 +188,30 @@ class MyFIMEventHandler(FileSystemEventHandler): #A custom class that inherits f
         #These capture both the original and new location of the file 
         old_path = event.src_path
         new_path = event.dest_path
+        old_key = os.path.normpath(old_path)
+        new_key = os.path.normpath(new_path)
 
         try:
             new_hash = generate_hash(new_path) #Hashes the file at its new location
+
+            if old_key not in self.baseline:
+                print(f"A file that was not being tracked has been moved: {old_path} -> {new_path}")
+
+                try:
+                    save_detection_alert(old_path, "Renamed/Moved (A file that is not tracked)", dest_path=new_path)
+                except OSError as e:
+                    print(f"Could not save the alert for {old_path}: {e}")
+
+                try:
+                    send_alert(os.path.basename(new_path), "Renamed/Moved (A file that is not tracked)")
+                except Exception as e:
+                    print(f"Could not send the notification for {new_path}: {e}")
+
+                #This is just for supressing duplicate events of on_modified but it's not going to save the hash to the trusted baseline storage
+                self.last_known_hash[new_path] = new_hash
+                self.last_known_hash.pop(old_path, None)
+                return
+
             baseline_hash = self.baseline.get(os.path.normpath(old_path)) #Fetches the original baseline hash of that file using its old file path
 
             #Here alerts are saved either way but the difference is between whether the file was just moved or if its content was also changed
