@@ -4,25 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyFIM Dashboard</title>
+    <!-- Load Poppins font for a clean and modern look -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to custom dashboard styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
 </head>
 <body>
+    <!--TOP NAVIGATION BAR-->
     <header class="dashboard-header">
         <div class="left-header">
             <div class="logo-box">
+                <!-- logo and title -->
                 <img src="{{ url_for('static', filename='MyFIM.png') }}" alt="MyFIM Logo" class="header-logo">
                 <span>MyFIM Dashboard</span>
             </div>
         </div>
         <div class="right-header">
+            <!-- Sign out button -->
             <button class="logout-button">Log Out</button>
         </div>
     </header>
 
-    <!--The main container that holds the content of the dashboard-->
+    <!--MAIN DASHBOARD CONTENT-->
     <main class="dashboard-container">
-        <!--The summary cards at the top of the dashboard-->
+        
+        <!-- Summary status cards -->
         <div class="cards">
             <div class="card">
                 <div class="card-text">
@@ -50,8 +56,7 @@
             </div>
         </div>
 
-        <!--The tables with actual data about the files being monitored and any file change alerts reported-->
-        <!--The 'Monitored Files' table-->
+        <!--MONITORED FILES TABLE-->
         <div class="data-section">
             <h2 class="table-heading">Monitored Files</h2>
             <div class="table-responsive">
@@ -62,8 +67,9 @@
                             <th>Location of File</th>
                         </tr>
                     </thead>
+                    <!-- Table body will be populated by JavaScript later -->
                     <tbody id="monitoredFilesBody">
-                        <!--Will later be dynamically populated by Javascript-->
+                        <!-- Placeholder data for now just to test-->
                         <tr>
                             <td><strong>payroll.xlsx</strong></td>
                             <td class="filepath">C:\business\finance\</td>
@@ -77,8 +83,8 @@
             </div>
         </div>
 
+        <!--ALERTS TABLE-->
         <div class="data-section">
-            <!--The 'Alerts' table-->
             <h2 class="table-heading">Alerts</h2>
             <div class="table-responsive">
                 <table class="table">
@@ -90,13 +96,15 @@
                             <th>When did the file change happen?</th>
                         </tr>
                     </thead>
+                    <!-- Table body will be filled dynamically by JavaScript -->
                     <tbody id="alertsBody">
-                        <!--Will later be dynamically populated by Javascript-->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
+
+    <!-- Link to dashboard JavaScript for interactivity -->
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </body>
 </html>
