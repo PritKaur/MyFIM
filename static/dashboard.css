@@ -1,143 +1,217 @@
-*{
+/* Load Poppins font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Reset all margins/paddings and apply Poppins font globally */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
-body{
-    background-color: white;
+
+/* Full-page background and text color */
+body {
+    background-color: #f8f9fa;
+    color: #1a1a1a;
     min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/*TOP NAVIGATION BAR*/
+/* Header bar: MyFIM logo on left, logout on right */
+.dashboard-header {
+    display: flex;
+    width: 100%;
+    height: 110px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.155);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* MyFIM logo: image and "MyFIM Dashboard" text side by side */
+.logo-box {
+    display: flex;
+    align-items: center;
+    gap: 3px; 
+    color: #0056b3;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+}
+
+/* MyFIM logo image */
+.header-logo {
+    height: 104px; 
+    width: auto;  
+    object-fit: contain;
+}
+
+/* Right side of header: logout button area */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Log Out button in top-right corner */
+.logout-button {
+    text-decoration: none;
+    color: #6c757d;
+    border: 1.5px solid #e9ecef;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+/* Log Out button turns red on hover */
+.logout-button:hover {
+    color: #ffffff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+    cursor: pointer;
+}
+
+/*MAIN DASHBOARD CONTENT*/
+/* Centered container for all dashboard content */
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+/* SUMMARY STATUS CARDS*/
+/* Grid of 4 cards: Total Files, Total Alerts, Modified, Deleted */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* Individual stat card (white box with number) */
+.card {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.178);
+    border: 1px solid #e9ecef;
     display: flex;
     flex-direction: column;
-}
-/*The container for 'MyFIM Dashboard' and 'Dashboard Overview' text*/
-.dashboard-header{
-    display: flex;
-    width: 100%;
-    height: 70px;
-    align-items: center;
     justify-content: space-between;
-    padding-right: 25px;
-    border: 1px solid black;
+    transition: all 0.2s ease;
 }
-/*Left header is the 'MyFIM Dashboard' and 'Dashboard Overview' text and right header is the log out button*/
-.left-header, .right-header{
-    display: flex;
-    align-items: center;
-    height: 100%;
+
+/* Card lifts up slightly on hover */
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
-/*The Log Out button container*/
-.right-header{
-    gap: 30px;
-    padding-right: 25px;
+
+/* Card text wrapper: label above, big number below */
+.card-text {
+    /* Container for label and count inside each card */
 }
-/*The 'MyFIM Dashboard' text*/
-.logo-box{
-    background-color: #0056b3;
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    height: 100%;
-    align-items: center;
-    display: flex;
-    padding: 0 25px;
-}
-/*The 'Dashboard Overview' text*/
-.page-title{
-    color: black;
-    font-size: 16px;
-    font-weight: bold;
-    padding-left: 15px;
-}
-/*Log Out button*/
-.logout-button{
-    background: white;
-    border: 1px solid black;
-    padding: 15px 35px;
-    border-radius: 18px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    transition: background-color 0.2s;
-}
-.logout-button:hover {
-    background-color: black;
-    color: white;
-}
-/*The main container that holds the content of the dashboard*/
-.dashboard-container{
-    max-width: 1350px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 40px 25px;
-}
-/*The summary cards at the top of the dashboard*/
-.cards{
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-    margin-bottom: 40px;
-}
-/*Individual summary card*/
-.card {
-    background: white;
-    border: 1px solid black;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    min-height: 150px;
-}
-/*The name/label of the card*/
+
+/* Card label text: e.g. "Total Files Monitored" */
 .card-label {
-    font-size: 15px;
+    font-size: 0.85rem;
+    color: #6c757d;
     font-weight: 500;
-    color: black;
-    margin-bottom: 15px;
-    line-height: 1.3;
+    margin-bottom: 8px;
 }
-/*Live counter that shows the current total for that card in that particular moment*/
+
+/* Card big number: e.g. "2" */
 .card-count {
-    font-size: 33px;
-    font-weight: bold;
-    color: black;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
 }
-/*The section with actual data*/
-.data-section{
-    margin-bottom: 40px;
+
+/*DATA TABLES*/
+/* White box wrapping each table (Monitored Files, Alerts) */
+.data-section {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+    border: 1px solid #e9ecef;
+    margin-bottom: 35px;
 }
-/*Monitored Files and Alerts Table Heading*/
-.table-heading{
-    font-size: 22px;
-    font-weight: bold;
-    color: black;
-    margin-bottom: 15px;
+
+/* Table title: "Monitored Files" or "Alerts" */
+.table-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #1a1a1a;
 }
-.table{
+
+/* Horizontal scroll wrapper for tables on small screens */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* The actual data table */
+.table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid black;
-}
-.table th, .table td{
-    border: 1px solid black;
-    padding: 14px 18px;
-    font-size: 15px;
     text-align: left;
-    color: black;
 }
-.table th{
-    font-weight: bold;
-    background-color: white;
+
+/* Table header row: column names like "Name of File" */
+.table th {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    padding: 14px 20px;
+    border-bottom: 2px solid #e9ecef;
 }
-/*The path of the file being monitored*/
-.filepath{
+
+/* Table data cells */
+.table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    vertical-align: middle;
+}
+
+/* Remove bottom border from last table row */
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Highlight table row on mouse hover */
+.table tbody tr:hover {
+    background-color: #dbdcdd8b;
+}
+
+/*SPECIAL STYLES*/
+/* File path text: e.g. "C:\business\finance\" */
+.filepath {
     font-family: 'Courier New', Courier, monospace;
-    color: #333;
+    color: #495057;
+    background: #f1f3f5;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    border: 1px solid #e9ecef;
 }
-/*File Change*/
-.text-danger{
-    color: red !important; /*The !important force the text inside the table cells to change color*/
+
+/* Alert type: red text for "Deleted" or danger alerts */
+td.text-danger {
+    color: #dc3545 !important;
+    font-weight: 600;
 }
