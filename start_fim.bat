@@ -14,5 +14,4 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-start python monitor.py
-pause
+start /min "MyFIM Monitor" cmd /c python monitor.py
