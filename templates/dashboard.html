@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyFIM Dashboard Page</title>
+    <title>MyFIM Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css')}}">
 </head>
 <body>
     <header class="dashboard-header">
         <div class="left-header">
-            <div class="logo-box">MyFIM Dashboard</div>
-            <div class="page-title">Dashboard Overview</div>
+            <div class="logo-box">
+                <img src="{{ url_for('static', filename='MyFIM.png') }}" alt="MyFIM Logo" class="header-logo">
+                <span>MyFIM Dashboard</span>
+            </div>
         </div>
         <div class="right-header">
             <button class="logout-button">Log Out</button>
@@ -51,44 +54,47 @@
         <!--The 'Monitored Files' table-->
         <div class="data-section">
             <h2 class="table-heading">Monitored Files</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name of File</th>
-                        <th>Location of File</th>
-                    </tr>
-                </thead>
-                <tbody id="monitoredFilesBody">
-                    <!--Will later be dynamically populated by Javascript-->
-                    <tr>
-                        <td><strong>payroll.xlsx</strong></td>
-                        <td class="filepath">C:\business\finance\</td>
-                    </tr>
-                    <tr>
-                        <td><strong>customers.csv</strong></td>
-                        <td class="filepath">C:\business\records\</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of File</th>
+                            <th>Location of File</th>
+                        </tr>
+                    </thead>
+                    <tbody id="monitoredFilesBody">
+                        <!--Will later be dynamically populated by Javascript-->
+                        <tr>
+                            <td><strong>payroll.xlsx</strong></td>
+                            <td class="filepath">C:\business\finance\</td>
+                        </tr>
+                        <tr>
+                            <td><strong>customers.csv</strong></td>
+                            <td class="filepath">C:\business\records\</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="data-section">
             <!--The 'Alerts' table-->
             <h2 class="table-heading">Alerts</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Name of File</th>
-                        <th>Location of File</th>
-                        <th>What type of file change happened?</th>
-                        <th>When did the file change happen?</th>
-                    </tr>
-                </thead>
-                <tbody id="alertsBody">
-                    <!--Will later be dynamically populated by Javascript-->
-                    
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name of File</th>
+                            <th>Location of File</th>
+                            <th>What type of file change happened?</th>
+                            <th>When did the file change happen?</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alertsBody">
+                        <!--Will later be dynamically populated by Javascript-->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
